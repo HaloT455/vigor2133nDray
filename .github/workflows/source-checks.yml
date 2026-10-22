@@ -27,6 +27,8 @@ jobs:
         run: make -C port_scaffold mips-object
       - name: Inspect object ABI
         run: file port_scaffold/alice_hal_mips32be.o | grep -E 'ELF 32-bit MSB relocatable, MIPS'
+      - name: Install MIPS-compatible LLD linker
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lld
       - name: Link MIPS analysis diagnostic (NOT FLASHABLE)
         run: make -C port_scaffold diagnostic-elf
       - name: Inspect ELF analysis diagnostic
