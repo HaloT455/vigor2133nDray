@@ -23,6 +23,7 @@ jobs:
           clang --target=mips-unknown-elf -march=mips32r2 -mabi=32 -EB -std=c11 -O2 -ffreestanding -fno-builtin -nostdlib -Wall -Wextra -Werror -c p59/src/alice_guard.c -o /tmp/alice_guard_p59_mips32be.o
           file /tmp/alice_guard_p59_mips32be.o | grep -E 'ELF 32-bit MSB relocatable, MIPS'
           readelf -h /tmp/alice_guard_p59_mips32be.o | grep -E 'Relocatable|MIPS'
+          if readelf -s /tmp/alice_guard_p59_mips32be.o | grep -E '__udivdi3|__divdi3|memcpy|malloc'; then echo 'Unexpected runtime dependency'; exit 1; fi
       - name: Publish NON-FLASHABLE proof object
         uses: actions/upload-artifact@v4
         with:
