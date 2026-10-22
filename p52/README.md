@@ -55,12 +55,13 @@ Tham khảo thiết kế: [Bifrost](https://github.com/maximhq/bifrost), [OmniRo
 - Dùng địa chỉ Gateway mặc định `.4.210`, chuyển cấu hình địa chỉ cũ `.2.210`, `.4.145`, `.10.1` sang mặc định mới; vẫn cho nhập Gateway khác.
 - Đọc dashboard JSON; có phương án đọc CPU/RAM số trực tiếp trong HTML dashboard khi CGI JSON lỗi. Không thực thi HTML/script trả về để lấy số liệu.
 - Bảng thống kê lấy đối tượng số liệu thật, giữ giá trị 0%, hiển thị thời điểm đo, bỏ số liệu quá 180 giây; phiên/số thiết bị chưa đọc được hiển thị chưa có.
+- Lệnh "tối ưu mạng" chỉ thu thập/chẩn đoán, không tự tắt IPv4/IPv6 limit hoặc Smart Limit. Bỏ giới hạn là thao tác riêng có thông báo rõ và xác nhận.
 - Auto-Adjustment có bật/tắt/khôi phục qua form DrayOS gốc; giữ giới hạn/quy tắc còn lại và chỉ báo thành công khi đọc lại khớp.
 - Gateway ở `.4.210` phục vụ chat cho LAN; thao tác quản trị vẫn phải vào phiên admin tại `.4.1`. Gateway không tự đăng nhập hay tự sửa WAN/DHCP/VLAN.
 
 ## Build và kiểm thử mã nguồn
 
-Mã nguồn trong thư mục `p52` trên nhánh GitHub. Firmware gốc và các tài nguyên DrayTek không được đưa lên kho công khai.
+Mã nguồn trong thư mục `p52` trên nhánh GitHub. Dùng `tools/build_p52.py` để build biến thể LAN210 hiện tại; `build.py` và `RESEARCH_TELEMETRY.md` được giữ từ nhánh nghiên cứu telemetry trước đó để bảo toàn công việc có sẵn. Firmware gốc và các tài nguyên DrayTek không được đưa lên kho công khai.
 
 ```bash
 python3 -m unittest discover -s tests -v

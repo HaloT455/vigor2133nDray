@@ -266,6 +266,7 @@
             message('Ch\u01b0a c\u00f3 m\u00f4i tr\u01b0\u1eddng form DrayOS. M\u1edf AI t\u1eeb menu c\u1ee7a router.'); return false;
         }
         try {
+            if(kind==='shared'&&!undo&&!readOnly&&!win.confirm('Lệnh này tắt giới hạn IPv4, IPv6 và Smart Limit; không phải cân bằng QoS. Bạn muốn bỏ các giới hạn này?'))throw new Error('Đã hủy bỏ giới hạn; không gửi thay đổi.');
             if(profile&&kind!=='elastic'&&(kind!=='ppa'||profile!=='auto'))throw new Error('Hồ sơ không hợp lệ.');
             if(!undo&&!readOnly&&(kind==='shared'||kind==='elastic')){var other=kind==='shared'?'elastic':'shared';if(saved(other))throw new Error('Khôi phục chế độ băng thông trước đó trước khi chuyển chế độ.');}
             if (undo && !saved(kind)) throw new Error('Kh\u00f4ng c\u00f3 b\u1ea3n kh\u00f4i ph\u1ee5c trong phi\u00ean n\u00e0y.');

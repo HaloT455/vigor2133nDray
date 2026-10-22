@@ -28,7 +28,7 @@ function parseDashboard(data){
  if(!Array.isArray(data)||data.length<2||data.length>1000||!data.every(function(x){return typeof x==='string'&&x.length<100000;})||data.join('').length>250000)throw new Error('Phiên DrayOS hết hạn hoặc dữ liệu dashboard chưa hợp lệ.');
  var raw={};data.forEach(function(s){var p=s.indexOf('='),k=s.slice(0,p);if(p>0&&/^[A-Za-z0-9_]{1,64}$/.test(k)&&!/^(auth|password|sFormAuthStr)$/i.test(k)){if(!Object.prototype.hasOwnProperty.call(raw,k))raw[k]=[];raw[k].push(s.slice(p+1));}});
  if(!Object.keys(raw).length)throw new Error('Dashboard không có dữ liệu.');
- var sr=(raw.sysres&&raw.sysres[0]||'').split(',');function percent(v){var n=Number(v);return String(v||'').trim()!==''&&isFinite(n)&&n>=0&&n<=100?n:null;}
+ var sr=(raw.sysres&&raw.sysres[0]||'').split(',');function percent(v){var s=String(v===null||v===undefined?'':v).trim(),m=/^(?:CPU|RAM|Memory|Mem)?\s*[:=]?\s*(100|\d\d?|\d\d?\.\d+)\s*%?$/i.exec(s);if(!m)return null;var n=Number(m[1]);return isFinite(n)&&n>=0&&n<=100?n:null;}
  var wans=(raw.wanidx||[]).map(function(x){var p=x.split(';');return{index:/^\d+$/.test(p[0])?Number(p[0])+1:null,connected:p.length>=6?(p[3]==='0'?true:p[3]==='1'?false:null):null,mode:p.length>=6?p[2]:'',uptime:p.length>=6?p[4]:'',ip:p.length>=6?p[5]:''};});
  var ports=(raw.iflanstatus&&raw.iflanstatus[0]||'').split(',').filter(function(x){return x!=='';}).map(function(x){return x==='1'?true:x==='0'?false:null;});
  return{time:new Date().toISOString(),cpu:percent(sr[0]),memory:percent(sr[1]),uptime:raw.sSystime?raw.sSystime[0]:null,wan:wans,lan_ports:ports,raw:raw,source:'drayos_authenticated_dashboard'};
