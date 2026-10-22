@@ -21,3 +21,9 @@ experiments/
 private-extracts/
 *.dump
 *.log
+
+# P32 diagnostics and UART logs
+*.analysis.elf
+*_diag.o
+diagnostic_entry.o
+*boot*.log
