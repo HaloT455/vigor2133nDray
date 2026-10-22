@@ -77,3 +77,18 @@ python3 tools/p27_integrity.py firmware.all \
 ```
 
 **No extracted proprietary firmware, driver, DLM or UI assets have been committed to the public GitHub repository.** Complete port readiness still requires hardware/SoC, boot address, DLM ABI, firmware loader and rollback validation.
+
+## P28 static port mapping (not a completed source port)
+
+The next research tool, [`tools/p28_port_inventory.py`](tools/p28_port_inventory.py), inspects private P27 RTOS/DLM/PFS exports for **hardware driver fingerprints**, **partial DLM header consistency**, a **heuristic MIPS call target map**, and **static ALICE login-page asset references**. Its outputs exclude the original firmware content, scripts with embedded credentials, and proprietary binaries. See [P28 readiness gates](docs/P28_PORT_READINESS.md).
+
+```bash
+python3 tools/p28_port_inventory.py \
+  --rtos private-extracts/rtos/rtos_mips_candidate.bin \
+  --dlm-dir private-extracts/dlm \
+  --pfs-dir private-extracts/pfs/V2000 \
+  --expected-sha256 6018940fd0b28e905504db13e01d4b979bd0c03eda5241be8cf005912f8de612 \
+  --out experiments/p28_inventory.json
+```
+
+**Do not confuse green CI with recovered DrayOS source, a bootable port, or proven safe firmware.** Hardware-specific porting still requires exact destination hardware, serial console evidence and board driver validation.
