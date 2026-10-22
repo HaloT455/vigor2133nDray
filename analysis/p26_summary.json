@@ -1,0 +1,25 @@
+{
+  "schema": "alice.vigor2133n.p26.summary.v1",
+  "source_filename": "ALICE_V2133n_P25_CHAT_FIX_P12_BASE_NOT_FLASH_VERIFIED.all",
+  "source_sha256": "009d4fa7eb4dc3428d9956505fa4463384d7e8a6c8bddea230b1abc907ebd2c2",
+  "source_bytes": 15761588,
+  "firmware_version": "3.9.7_Anphat",
+  "header_model": "v2133",
+  "mips_big_endian_word_sample": {"offset_hex": "0x100", "words": 32, "subset_decoded": 32},
+  "zip_magic_candidates": 57,
+  "zip_local_entries_crc_and_size_verified": 8,
+  "deflate_crc_valid_but_descriptor_size_rejected": 3,
+  "ui_string_marker_counts_unvalidated": {
+    "html_open": 58,
+    "html_close": 26,
+    "script_open": 48,
+    "form_open": 66,
+    "login": 81,
+    "vlan": 127,
+    "mesh": 55
+  },
+  "legacy_lzo_magic_at_0x5266": "embedded_within_MIPS_code_candidate_not_validated_compression",
+  "entire_rom_extracted": false,
+  "repack_format_validated": false,
+  "flash_verified": false
+}
