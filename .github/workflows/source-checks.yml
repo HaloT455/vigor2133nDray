@@ -13,6 +13,8 @@ jobs:
           python-version: '3.12'
       - name: Install Python LZ4 dependency
         run: python -m pip install -r requirements.txt
+      - name: Validate P35 read-only diagnostic shell syntax
+        run: bash -n tools/p35_live_probe.sh
       - name: Unit tests (synthetic fixture only)
         run: python -m unittest discover -s tests -v
 
