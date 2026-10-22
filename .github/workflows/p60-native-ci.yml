@@ -1,0 +1,36 @@
+name: P60 router-only native integration prototype (NOT FLASHABLE)
+on:
+  push:
+    branches:
+      - work/v2133n-fixes
+    paths:
+      - 'p60/**'
+      - '.github/workflows/p60-native-ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Native policy host tests
+        run: |
+          cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic p60/src/alice_guard.c p60/src/alice_rt_platform.c p60/tests/test_guard.c -o /tmp/p60-policy
+          /tmp/p60-policy
+          cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic p60/src/alice_guard.c p60/src/alice_rt_platform.c p60/tests/test_rt_platform.c -o /tmp/p60-adapter
+          /tmp/p60-adapter
+      - name: Compile standalone MIPS32 BE objects
+        run: |
+          clang --target=mips-unknown-elf -march=mips32r2 -mabi=32 -EB -std=c11 -O2 -ffreestanding -fno-builtin -nostdlib -Wall -Wextra -Werror -c p60/src/alice_guard.c -o /tmp/alice_guard_p60.o
+          clang --target=mips-unknown-elf -march=mips32r2 -mabi=32 -EB -std=c11 -O2 -ffreestanding -fno-builtin -nostdlib -Wall -Wextra -Werror -c p60/src/alice_rt_platform.c -o /tmp/alice_rt_platform_p60.o
+          file /tmp/alice_guard_p60.o /tmp/alice_rt_platform_p60.o | grep -E 'ELF 32-bit MSB relocatable, MIPS'
+          if readelf -Ws /tmp/alice_guard_p60.o /tmp/alice_rt_platform_p60.o | grep -E '__udivdi3|__divdi3|malloc|printf|system|popen|dlopen'; then exit 1; fi
+      - name: Publish engineering objects only
+        uses: actions/upload-artifact@v4
+        with:
+          name: P60-NATIVE-OBJECTS-NOT-FLASHABLE
+          path: |
+            /tmp/alice_guard_p60.o
+            /tmp/alice_rt_platform_p60.o
+          retention-days: 7
