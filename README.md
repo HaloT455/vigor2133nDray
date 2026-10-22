@@ -131,3 +131,15 @@ python3 tools/p31_port_gate.py --out experiments/p31_gates.json
 ```
 
 **The four full-port goals remain NOT COMPLETE** until real source or functional reimplementation, chip-specific drivers, a bootable router image and physical UART/network/rollback tests exist. A green CI badge proves tests, not boot. See [evidence gates](docs/P31_PORT_COMPLETION_GATES.md).
+
+## P32 — linked diagnostic and boot evidence gate
+
+The new [P32 HAL diagnostic](port_scaffold/diagnostic_entry.c) **cross-compiles and links** into an ELF32 big-endian MIPS32r2 executable via [build_diagnostic.sh](port_scaffold/build_diagnostic.sh). This is not a DrayOS firmware, router loader or recovery image. The synthetic address `0x10000` has never been verified against Vigor2133n hardware. The offline [P32 port check](tools/p32_port_check.py) reports exact architecture and checks the unchanged proprietary baseline's checksums when supplied; it **never** marks physical boot verified. The [UART capture](tools/p32_uart_capture.py) is read-only and must be used only with a safely identified **3.3V TTL** port. See [P32 build and boot gates](docs/P32_BUILD_AND_BOOT_GATES.md).
+
+```bash
+make -C port_scaffold host-check mips-object diagnostic-elf
+python3 -m tools.p32_port_check --elf port_scaffold/alice_diagnostic.analysis.elf \
+  --out experiments/p32_linked_diagnostic.json
+```
+
+**No full DrayOS source, flashable firmware port, hardware boot acceptance, LAN/WAN/Wi-Fi functional tests, or rollback test has been achieved.** A green GitHub Actions badge confirms only the synthetic toolchain and test fixtures.
