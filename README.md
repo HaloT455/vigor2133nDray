@@ -40,3 +40,20 @@ python3 -m unittest discover -s tests -v
 Upstream reference: [gckrol/draytools](https://github.com/gckrol/draytools) is an archived research project that lists older Vigor models; **Vigor2133n is not on its tested list**. It is not a validated repacker for this image.
 
 DrayTek documentation: [difference between ALL and RST](https://www.draytek.com/support/knowledge-base/difference-between-firmware-files). Firmware `.all` typically preserves configuration, while `.rst` restores factory defaults. Neither implies a manually patched image is safe to install.
+
+## P26 enhanced static inspection
+
+```bash
+python3 tools/rom_resource_index.py /path/to/firmware.all \
+  --verify-sha256 009d4fa7eb4dc3428d9956505fa4463384d7e8a6c8bddea230b1abc907ebd2c2 \
+  --out experiments/resources.json
+python3 tools/rom_mips_probe.py /path/to/firmware.all --offset 0x100 --count 32 \
+  --out experiments/mips.json
+# Optional PRIVATE export of CRC+size validated resources:
+python3 tools/rom_resource_index.py /path/to/firmware.all --export private-extracts/
+python3 -m unittest discover -s tests -v
+```
+
+Research findings on the uploaded P25 image: **8** strictly validated deflate entries, **3** rejected for descriptor size mismatch, and **32/32** MIPS big-endian candidate words recognized by a limited decoder at 0x100. Raw occurrences of HTML/VLAN/mesh strings do not prove independent features. See [P26 map](analysis/p26_rom_map.md) and [roadmap](docs/PHASES.md).
+
+The official Australian [Vigor2133 Series download page](https://www.draytek.com.au/support/downloads/vigor2133-series/) lists firmware **3.9.9.6**, dated 2026-09-18. Do not flash unknown images: check exact model and region, vendor release notes and a reliable recovery method first.
