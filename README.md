@@ -155,3 +155,9 @@ python3 tools/p33_dtb_audit.py private-extracts/rtos/rtos_mips_candidate.bin \
 ```
 
 **Do not interpret CI success, ELF link success, or a valid FDT as real router boot verification.** Original DrayOS source/functional substitute, live BSP/drivers and on-device acceptance are still outstanding.
+
+## P35 — P34 booted but appeared unchanged
+
+The private P34 image still referenced cached `../js/*.js?v=253` despite updated PFS scripts, and P34 left login pages visually unchanged. The user-reported symptom is documented in [P35 diagnosis](docs/P35_NO_VISIBLE_CHANGES_DIAGNOSIS.md). P35's separate, **offline-only** six-HTML-resource patch corrects script casing/version, adds a visible ALICE P35 / Offline test button, and embeds a centered dark-maroon login skin while preserving DrayOS auth and all firmware BIN bytes. All 1,312 PFS resources, BIN+WEB checksum and trailing MD5 validated, within the user-specified 27 MB cap; physical P35 router behavior is **not verified**.
+
+To confirm whether the actual router serves new PFS instead of old browser/login content, run `bash tools/p35_live_probe.sh 192.168.4.1` on a machine connected to that LAN. A green CI does NOT certify hardware flashing. No original proprietary firmware, image or credentials are committed to this public repository.
