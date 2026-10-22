@@ -1,0 +1,34 @@
+name: P56 compact Guardian bridge (synthetic only)
+on:
+  push:
+    branches:
+      - work/v2133n-fixes
+    paths:
+      - 'p56/**'
+      - 'tests/test_p56_bridge.py'
+      - '.github/workflows/p56-bridge-ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bridge-and-learning:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate P56 Python source
+        run: python -m py_compile p56/telemetry_bridge.py p56/device_learning.py
+      - name: Run P56 Guardian bridge tests (synthetic)
+        run: python -m unittest discover -s tests -p test_p56_bridge.py -v
+      - name: Verify fail-closed source does not remotely write router configuration
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          a=Path('p56/telemetry_bridge.py').read_text()
+          b=Path('p56/device_learning.py').read_text()
+          for term in ('subprocess.run(', 'os.system(', 'urllib.request.urlopen(', 'requests.post('):
+              assert term not in a and term not in b, term
+          print('PASS: isolated data bridge and advisory learning only')
+          PY
