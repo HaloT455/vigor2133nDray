@@ -15,6 +15,8 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Validate P35 read-only diagnostic shell syntax
         run: bash -n tools/p35_live_probe.sh
+      - name: P37 adaptive observer smoke test
+        run: node --check web/alice_p37_adaptive.js && node tests/p37_adaptive.test.cjs
       - name: P36 offline chat fallback smoke test
         run: node --check web/alice_p36_offline_fallback.js && node tests/p36_browser_fallback.test.cjs
       - name: Unit tests (synthetic fixture only)
