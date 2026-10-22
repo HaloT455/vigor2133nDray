@@ -8,7 +8,7 @@ def checksum(section_without_sum):
     return section_without_sum+struct.pack(">I",total^0xffffffff)
 
 def sample():
-    bin_part=checksum(struct.pack(">I",260)+b"\0"*252)
+    bin_part=checksum(struct.pack(">I",516)+b"\0"*508)
     web_part=checksum(struct.pack(">II",16,4)+b"TEST")
     core=bin_part+web_part
     return core+TAG+hashlib.md5(core).hexdigest().encode()
