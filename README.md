@@ -57,3 +57,5 @@ python3 -m unittest discover -s tests -v
 Research findings on the uploaded P25 image: **8** strictly validated deflate entries, **3** rejected for descriptor size mismatch, and **32/32** MIPS big-endian candidate words recognized by a limited decoder at 0x100. Raw occurrences of HTML/VLAN/mesh strings do not prove independent features. See [P26 map](analysis/p26_rom_map.md) and [roadmap](docs/PHASES.md).
 
 The official Australian [Vigor2133 Series download page](https://www.draytek.com.au/support/downloads/vigor2133-series/) lists firmware **3.9.9.6**, dated 2026-09-18. Do not flash unknown images: check exact model and region, vendor release notes and a reliable recovery method first.
+
+Potential AA1D7F50 record layout: 212 raw markers, 146 sizes point inside the file, 14 inferred ends touch the next marker. Use `python3 tools/rom_record_probe.py firmware.all --out experiments/records.json` for reproducible *unvalidated* analysis. The format is not solved and existing HTML fragments contain embedded control bytes; naive HTML carving is not reliable.
