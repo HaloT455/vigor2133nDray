@@ -59,3 +59,21 @@ Research findings on the uploaded P25 image: **8** strictly validated deflate en
 The official Australian [Vigor2133 Series download page](https://www.draytek.com.au/support/downloads/vigor2133-series/) lists firmware **3.9.9.6**, dated 2026-09-18. Do not flash unknown images: check exact model and region, vendor release notes and a reliable recovery method first.
 
 Potential AA1D7F50 record layout: 212 raw markers, 146 sizes point inside the file, 14 inferred ends touch the next marker. Use `python3 tools/rom_record_probe.py firmware.all --out experiments/records.json` for reproducible *unvalidated* analysis. The format is not solved and existing HTML fragments contain embedded control bytes; naive HTML carving is not reliable.
+
+## P27 structural reverse engineering — recovered container layout
+
+The checked P25 image contains a 290-block length-prefixed LZ4 RTOS region (19,001,596 bytes decoded), a four-entry `DLM/1.0` directory, and a 111-block LZ4 `PFS/1.0` resource area (7,273,845 bytes decoded). PFS has 1,312 indexed resources: 771 LZ4-encoded (5 span more than one chunk) and 541 raw. See [analysis/P27 report](analysis/p27_unpack_report.md).
+
+The DrayTek section format is also validated: two independent big-endian 32-bit additive one's-complement checksums (BIN and WEB sections both sum to `0xFFFFFFFF`) plus a matching `DrayTekImageMD5` footer. Run `tools/p27_integrity.py` to validate these offline. These integrity checks **do not guarantee flashability or reconstruct any original vendor source code**.
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 tools/p27_container_unpack.py firmware.all \
+  --verify-sha256 009d4fa7eb4dc3428d9956505fa4463384d7e8a6c8bddea230b1abc907ebd2c2 \
+  --out experiments/p27.json --manifest-private experiments/manifest.json \
+  --export-private private-extracts/
+python3 tools/p27_integrity.py firmware.all \
+  --expect-sha256 009d4fa7eb4dc3428d9956505fa4463384d7e8a6c8bddea230b1abc907ebd2c2
+```
+
+**No extracted proprietary firmware, driver, DLM or UI assets have been committed to the public GitHub repository.** Complete port readiness still requires hardware/SoC, boot address, DLM ABI, firmware loader and rollback validation.
