@@ -1,0 +1,11 @@
+{
+  "html_outside_scripts_unchanged_except_gateway_address": true,
+  "inline_styles_identical": true,
+  "css_and_logo_files_identical": true,
+  "python_tests_passed": 17,
+  "chromium_checks_passed": 9,
+  "javascript_frontend_checks_passed": true,
+  "live_X270_install_tested": false,
+  "physical_LAN_clients_tested": false,
+  "P52_hardware_boot_tested": false
+}

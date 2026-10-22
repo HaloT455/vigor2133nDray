@@ -1,0 +1,26 @@
+{
+  "version": "P52",
+  "alice_url": "http://192.168.4.210",
+  "router_url": "http://192.168.4.1",
+  "size_bytes": 16308424,
+  "limit_bytes": 27000000,
+  "free_bytes": 10691576,
+  "sha256": "c490881061045da06a91a7acde9fd2bb5796ec4d39d99c3863920b423a93eafd",
+  "baseline_sha256": "717addfa8655055efe3d9df03cd6e69f1c2ea894642b470de00f66cd4f9a8f24",
+  "native_bin_sha256": "ff40ae2ce378f406f721d43d4f30ba5c9ec3e4f60e7561f18203f1f075082d8e",
+  "native_bin_unchanged": true,
+  "unchanged_resources_byte_preserved": true,
+  "css_and_logo_unchanged": true,
+  "changed_files": [
+    "V2000\\DOC\\alice_ai.htm",
+    "V2000\\JS\\alice_ctrl.js",
+    "V2000\\JS\\alice_app.js",
+    "V2000\\JS\\alice_local.js",
+    "V2000\\alice.htm",
+    "V2000\\JS\\alice_context.js"
+  ],
+  "resource_count": 1313,
+  "container_integrity_verified": true,
+  "hardware_boot_verified": false,
+  "private_ip_activation_requires_gateway_install": true
+}
