@@ -1,0 +1,32 @@
+{
+  "schema": "alice.vigor2133n.audit.v1",
+  "filename": "ALICE_V2133n_P25_CHAT_FIX_P12_BASE_NOT_FLASH_VERIFIED.all",
+  "size_bytes": 15761588,
+  "sha256": "009d4fa7eb4dc3428d9956505fa4463384d7e8a6c8bddea230b1abc907ebd2c2",
+  "header": {
+    "header_size_assumed": 256,
+    "first_8_bytes_hex": "0093fdec07909618",
+    "model_candidate": "v2133",
+    "version_candidate": "3.9.7",
+    "distribution_candidate": "3.9.7_Anphat",
+    "build_family_candidate": "V385",
+    "code_starts_at_0x100_candidate": true,
+    "architecture_candidate": "MIPS big-endian (unverified)"
+  },
+  "selected_magic_counts_unvalidated": {
+    "squashfs_le": 0,
+    "squashfs_be": 0,
+    "ubi_erase_counter": 0,
+    "uimage": 0,
+    "elf": 1,
+    "zip_local": 57,
+    "zip_central": 4,
+    "zip_end": 2,
+    "gzip": 0
+  },
+  "notes": [
+    "These are unvalidated byte-pattern occurrences, not extracted files.",
+    "ZIP local marker first observed at offset 0x945de3.",
+    "Do not mark the image flashable without format/checksum and device validation."
+  ]
+}
