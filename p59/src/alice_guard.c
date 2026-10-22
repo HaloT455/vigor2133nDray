@@ -60,12 +60,12 @@ int ag_observe_device(struct ag_engine *e,ag_u32 ip,ag_u32 down,ag_u32 up,enum a
  if(d->last_sample_sec&&now-d->last_sample_sec>300){d->samples=0;d->bursts=0;d->ema_kbps=0;}
  d->last_sample_sec=now;d->observed_down_kbps=down;d->observed_up_kbps=up;d->traffic_class=(ag_u8)cls;
  total=down+up;
- if(d->samples>=5 && total>1500 && (unsigned long long)total>(unsigned long long)d->ema_kbps*3u){
+ if(d->samples>=5 && total>1500 && total>d->ema_kbps*3u){
   if(d->bursts<3)d->bursts++;
  }else d->bursts=0;
  if(d->bursts==3){decision(out,AG_ALERT_DEVICE,ip,0);d->bursts=0;}
  if(d->samples==0)d->ema_kbps=total;
- else d->ema_kbps=(ag_u32)(((unsigned long long)d->ema_kbps*7+total)/8);
+ else d->ema_kbps=(ag_u32)((d->ema_kbps*7u+total)/8u);
  if(d->samples<65535)d->samples++;
  return 1;
 }
@@ -113,8 +113,13 @@ unsigned ag_qos_plan(const struct ag_engine *e,ag_u32 now,struct ag_qos *out,uns
   const struct ag_device *d=&e->devices[i];ag_u32 w;
   if(!d->ip||protected_ip(e,d->ip)||!age_ok(now,d->last_sample_sec,30))continue;
   w=weights[min_u32(d->traffic_class,3)];
-  out[count].ip=d->ip;out[count].down_cap_kbps=(ag_u32)((unsigned long long)e->wan_down_kbps*85u*w/(100u*denom));
-  out[count].up_cap_kbps=(ag_u32)((unsigned long long)e->wan_up_kbps*85u*w/(100u*denom));
+  /* Numerically safe 32-bit split: denominator >= w; avoids __udivdi3
+   and stays below 10,000,000*85 < UINT32_MAX at each step. */
+  out[count].ip=d->ip;
+  out[count].down_cap_kbps=((e->wan_down_kbps/denom)*w*85u)/100u +
+    (((e->wan_down_kbps%denom)*w*85u)/(100u*denom));
+  out[count].up_cap_kbps=((e->wan_up_kbps/denom)*w*85u)/100u +
+    (((e->wan_up_kbps%denom)*w*85u)/(100u*denom));
   out[count].ready=1;out[count].applied=0;count++;
  }
  return count;
