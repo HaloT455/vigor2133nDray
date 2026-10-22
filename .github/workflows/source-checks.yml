@@ -15,3 +15,15 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Unit tests (synthetic fixture only)
         run: python -m unittest discover -s tests -v
+
+  c-hal-compile:
+    name: HAL host + MIPS cross-compile (NO DEVICE BOOT)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Host HAL unit test
+        run: make -C port_scaffold host-check
+      - name: Cross compile relocatable MIPS32 BE object
+        run: make -C port_scaffold mips-object
+      - name: Inspect object ABI
+        run: file port_scaffold/alice_hal_mips32be.o | grep -E 'ELF 32-bit MSB relocatable, MIPS'
