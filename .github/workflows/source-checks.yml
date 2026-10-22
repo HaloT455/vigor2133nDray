@@ -27,3 +27,7 @@ jobs:
         run: make -C port_scaffold mips-object
       - name: Inspect object ABI
         run: file port_scaffold/alice_hal_mips32be.o | grep -E 'ELF 32-bit MSB relocatable, MIPS'
+      - name: Link MIPS analysis diagnostic (NOT FLASHABLE)
+        run: make -C port_scaffold diagnostic-elf
+      - name: Inspect ELF analysis diagnostic
+        run: file port_scaffold/alice_diagnostic.analysis.elf | grep -E 'ELF 32-bit MSB executable, MIPS'
