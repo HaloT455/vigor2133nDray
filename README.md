@@ -113,3 +113,21 @@ This is **research output, NOT FLASH VERIFIED and NOT the full DrayOS source**. 
 The original **19,001,596-byte** extracted RTOS payload can now be wrapped for private use into an **ELF32 big-endian MIPS** analysis file with [`tools/p30_mips_elf_view.py`](tools/p30_mips_elf_view.py). The user ROM output was successfully decoded by `llvm-objdump` in the local analysis environment, exposing MIPS instructions and potential call sites. See [P30 validation](docs/P30_DISASSEMBLY_IMPORT.md). No real runtime load address, verified entry point, source code, linker sections, or flash-boot compatibility has been established.
 
 **Green tests refer to the research toolchain, not completion of a DrayOS/OpenWrt port.** Never flash experimental `.lab.bin` or `.analysis.elf` output.
+
+## P31 — verified offline progress toward porting
+
+Added source for static MIPS cross-reference candidates, DLM structural analysis, an evidence-driven port gate, and privacy-conscious UART triage. The completely extracted **19,001,596-byte** RTOS was scanned; 19,711 prologue **candidates** and 117 matching low-28-bit JAL-target candidates were found, **not recovered source functions**. All four DLM headers passed structural validation, but the loader ABI is unknown.
+
+A new independent [C HAL scaffold](port_scaffold/) compiles on the host and as a MIPS32r2 big-endian **relocatable object**. This verifies the cross-compiler and interface syntax; it is **not** a bootable router firmware or actual device driver. GitHub CI now tests both the Python research toolkit and the host/MIPS HAL build.
+
+Run static analysis privately:
+```bash
+python3 tools/p31_rtos_xrefs.py private-extracts/rtos/rtos_mips_candidate.bin \
+  --expected-sha256 6018940fd0b28e905504db13e01d4b979bd0c03eda5241be8cf005912f8de612 \
+  --limit-mib 20 --out experiments/p31_xrefs_private.json
+python3 tools/p31_dlm_abi_probe.py private-extracts/dlm --out experiments/p31_dlm_private.json
+make -C port_scaffold host-check mips-object
+python3 tools/p31_port_gate.py --out experiments/p31_gates.json
+```
+
+**The four full-port goals remain NOT COMPLETE** until real source or functional reimplementation, chip-specific drivers, a bootable router image and physical UART/network/rollback tests exist. A green CI badge proves tests, not boot. See [evidence gates](docs/P31_PORT_COMPLETION_GATES.md).
