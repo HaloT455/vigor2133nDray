@@ -1,0 +1,16 @@
+# Do not commit proprietary binaries, personal router configs, keys or unknown extracts.
+*.all
+*.rst
+*.bin
+*.img
+*.elf
+*.cfg
+*.key
+*.pem
+*.p12
+*.zip
+*.out
+__pycache__/
+*.pyc
+__extracts__/
+experiments/
