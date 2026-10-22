@@ -1,0 +1,35 @@
+name: P52 LAN Alice checks
+on:
+  push:
+    paths: ['p52/**', '.github/workflows/p52-checks.yml']
+  pull_request:
+    paths: ['p52/**', '.github/workflows/p52-checks.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  functional-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Gateway, LAN preflight and rollback tests
+        run: python3 -m unittest discover -s p52/tests -v
+      - name: Frontend parsing and session tests
+        run: node p52/tests/frontend.cjs
+      - name: JavaScript syntax
+        run: for f in p52/web/JS/*.js; do node --check "$f"; done
+      - name: Package Linux installer (no private firmware)
+        run: |
+          mkdir -p ALICE_P52_LAN210
+          cp p52/gateway/*.py p52/gateway/*.html p52/gateway/providers.example.json p52/README.md ALICE_P52_LAN210/
+          python3 -m zipfile -c ALICE_P52_LAN210_GATEWAY.zip ALICE_P52_LAN210
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ALICE-P52-LAN210-Gateway
+          path: ALICE_P52_LAN210_GATEWAY.zip

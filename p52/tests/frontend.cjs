@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs'),vm=require('node:vm');
+const local=require('../web/JS/alice_local.js');
+let s=local.parseDashboard(['sysres=0,40','sSystime=0:1:2:3']);assert.equal(s.cpu,0);assert.equal(s.memory,40);
+assert.equal(local.parseDashboard(['sysres=CPU: 25%,RAM=40%','sSystime=0:1:2:3']).cpu,25);
+assert.equal(local.parseDashboardHTML("makesysres(['0','40']); var ary_sysTime=[1,2,3];").cpu,0);
+assert.throws(()=>local.parseDashboardHTML('<input type="password">'));
+for(const q of ['không bật chia sẻ linh hoạt','đừng bật PPA','PPA Auto là gì'])assert.ok(!local.intent(q).apply);
+const window={location:{origin:'http://192.168.4.1',href:'http://192.168.4.1/alice.htm?sFormAuthStr=Token'},parent:null,localStorage:{getItem(){return 'http://192.168.2.210'}},sessionStorage:{getItem(){return ''}}};window.parent=window;
+window.addEventListener=function(){};
+const document={readyState:'loading',addEventListener(){},querySelectorAll(){return []},getElementById(id){return id==='gateway-url'?{value:'http://192.168.4.210'}:null;}};
+vm.runInNewContext(fs.readFileSync(require.resolve('../web/JS/alice_context.js'),'utf8'),{window,document,location:window.location,URL,CustomEvent:class{}});
+assert.equal(window.ALICE_CONTEXT.auth(),'Token');assert.equal(window.ALICE_CONTEXT.gateway(),'http://192.168.4.210');
+assert.throws(()=>window.ALICE_CONTEXT.setGateway('http://user:password@192.168.4.210/'));
+console.log('Frontend parsing, negation, context and endpoint checks PASS');

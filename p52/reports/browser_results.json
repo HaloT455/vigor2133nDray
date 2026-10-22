@@ -1,0 +1,17 @@
+{
+  "passed": 11,
+  "checks": [
+    "Inline runtime boots with all external core JS blocked",
+    "Session resolved from real same-origin parent URL",
+    "OEM dashboard numeric telemetry displayed",
+    "Auto-Adjustment enables from disabled state, verifies rates and preserves native rule fields",
+    "Auto-Adjustment OFF preserves bandwidth limits",
+    "Restore recovers original disabled state and rates",
+    "Optimize chat reads data without disabling limits or changing PPA",
+    "Cancelled limit-removal confirmation sends no native POST",
+    "HTML fallback keeps true 0 percent and quoted LAN count",
+    "Negated chat command does not apply settings",
+    "No browser JavaScript errors"
+  ],
+  "errors": []
+}
