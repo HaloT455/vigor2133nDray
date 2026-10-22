@@ -1,0 +1,31 @@
+name: P59 Native Guardian C + MIPS cross-compile (NOT FLASHABLE)
+on:
+  push:
+    branches:
+      - work/v2133n-fixes
+    paths:
+      - 'p59/**'
+      - '.github/workflows/p59-native-ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile and run C policy tests on host
+        run: |
+          cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic p59/src/alice_guard.c p59/tests/test_guard.c -o /tmp/alice-p59-host
+          /tmp/alice-p59-host
+      - name: Cross-compile freestanding MIPS32r2 BIG-endian relocatable object
+        run: |
+          clang --target=mips-unknown-elf -march=mips32r2 -mabi=32 -EB -std=c11 -O2 -ffreestanding -fno-builtin -nostdlib -Wall -Wextra -Werror -c p59/src/alice_guard.c -o /tmp/alice_guard_p59_mips32be.o
+          file /tmp/alice_guard_p59_mips32be.o | grep -E 'ELF 32-bit MSB relocatable, MIPS'
+          readelf -h /tmp/alice_guard_p59_mips32be.o | grep -E 'Relocatable|MIPS'
+      - name: Publish NON-FLASHABLE proof object
+        uses: actions/upload-artifact@v4
+        with:
+          name: P59-NATIVE-POLICY-OBJECT-NOT-FLASHABLE
+          path: /tmp/alice_guard_p59_mips32be.o
+          retention-days: 7
