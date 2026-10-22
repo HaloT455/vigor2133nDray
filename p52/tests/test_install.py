@@ -24,13 +24,18 @@ class LANTests(unittest.TestCase):
                 if args[:4]==('ip','-j','-4','address'):return json.dumps([{'addr_info':[{'local':'192.168.4.13'}]}])
                 if args[:3]==('nmcli','-g','GENERAL.CON-UUID'):return 'real-profile-uuid'
                 if args[:3]==('nmcli','-g','ipv4.addresses'):return ''
+                if args==('ufw','status'):return 'Status: active'
+                if args[:2]==('ufw','allow'):return 'Skipping adding existing rule'
                 if args[:2]==('systemctl','is-active'):return 'active'
                 if args[:2]==('systemctl','is-enabled'):return 'enabled'
                 return ''
-            with patch.multiple(installer,DEST=dest,UNIT=unit,SITE=root/'nginx.conf',BACKUPS=root/'backup',ROUTES=root/'routes.json'),patch.object(installer,'run',side_effect=fake_run),patch.object(installer.shutil,'which',return_value='/usr/bin/tool'),patch.object(installer.subprocess,'run',return_value=types.SimpleNamespace(returncode=0)),patch.object(installer.os,'geteuid',return_value=0),patch.object(installer.time,'sleep'),patch.object(installer,'health',side_effect=RuntimeError('health failed')),patch.object(sys,'argv',['install_lan210.py']),contextlib.redirect_stdout(io.StringIO()):
+            def fake_health(url):
+                if '127.0.0.1' not in url:raise RuntimeError('health failed')
+            with patch.multiple(installer,DEST=dest,UNIT=unit,SITE=root/'nginx.conf',BACKUPS=root/'backup',ROUTES=root/'routes.json'),patch.object(installer,'run',side_effect=fake_run),patch.object(installer.shutil,'which',return_value='/usr/bin/tool'),patch.object(installer.subprocess,'run',return_value=types.SimpleNamespace(returncode=0)),patch.object(installer.os,'geteuid',return_value=0),patch.object(installer.time,'sleep'),patch.object(installer,'health',side_effect=fake_health),patch.object(sys,'argv',['install_lan210.py']),contextlib.redirect_stdout(io.StringIO()):
                 with self.assertRaisesRegex(RuntimeError,'health failed'):installer.main()
             self.assertEqual(unit.read_text(),'old unit')
             self.assertEqual((dest/'alice_gateway.py').read_text(),'old source')
             self.assertFalse((dest/'smart_route.py').exists());self.assertFalse((root/'nginx.conf').exists());self.assertFalse((root/'routes.json').exists())
             self.assertIn(('nmcli','connection','modify','uuid','real-profile-uuid','-ipv4.addresses','192.168.4.210/24'),calls)
             self.assertNotIn(('systemctl','stop','alice-gateway'),calls)
+            self.assertFalse(any(call[:3]==('ufw','--force','delete') for call in calls),'never remove an existing firewall rule')

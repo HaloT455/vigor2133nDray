@@ -11,7 +11,7 @@ BACKUPS=Path('/var/backups/alice-p52');ROUTES=Path('/etc/alice-gateway/routes.js
 FILES=('alice_gateway.py','smart_route.py','network_context.py','usage_extensions.py','index.html','usage.html')
 
 def run(*args,check=True):
-    return subprocess.run(list(args),check=check,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True).stdout.strip()
+    return subprocess.run(list(args),check=check,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,env={**os.environ,'LC_ALL':'C'}).stdout.strip()
 
 def validate_route(routes):
     if not isinstance(routes,list) or len(routes)!=1:raise RuntimeError('Không tìm thấy đường đi LAN rõ ràng tới 192.168.4.1.')
@@ -120,12 +120,13 @@ WantedBy=multi-user.target
             except Exception:
                 if attempt==19:raise
                 time.sleep(.25)
+        if run('systemctl','is-active','alice-p52')!='active':raise RuntimeError('Dịch vụ Alice P52 chưa chạy.')
         run('systemctl','reload-or-restart','nginx')
         if shutil.which('ufw'):
             status=run('ufw','status')
             rule='192.168.4.210 80/tcp'
             if status.startswith('Status: active') and rule not in status:
-                run('ufw','allow','from','192.168.4.0/24','to',IP,'port','80','proto','tcp','comment','ALICE-P52-LAN');ufw_added=True
+                added=run('ufw','allow','from','192.168.4.0/24','to',IP,'port','80','proto','tcp','comment','ALICE-P52-LAN');ufw_added='Skipping' not in added
         health('http://'+IP)
         print('PASS: mở http://192.168.4.210 trên thiết bị cùng LAN. Quản trị DrayTek vẫn ở http://192.168.4.1.')
         print('Giữ X270 bật; dành riêng 192.168.4.210 khỏi DHCP của router. Cấu hình model trong /etc/alice-gateway/routes.json rồi: sudo systemctl restart alice-p52')
