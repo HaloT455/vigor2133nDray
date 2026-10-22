@@ -2,7 +2,7 @@
 
 **Goal:** build independently resident on the **Vigor2133n DrayOS RTOS**, without ThinkPad X270, web browser or cloud model.
 
-**What was actually built:** from the preserved P58 baseline, a freestanding C11 **policy object** targeting MIPS32r2 big-endian: `ELF32 MSB MIPS32r2 relocatable`, 5,124 bytes, SHA256 `006ca8b3ab7d1828d8360e7e879de6de6d14070f41d1d9a1e39807dfb0a42788`. Host tests passed. The independently authored source archive is delivered in the conversation as `ALICE_P59_NATIVE_ENGINE_SOURCE_TESTS.zip` (includes `src/alice_guard.{h,c}`, unit tests, Makefile and compile proof).
+**What was actually built:** from the preserved P58 baseline, a freestanding C11 **policy object** targeting MIPS32r2 big-endian: `ELF32 MSB MIPS32r2 relocatable`, 5,032 bytes, SHA256 `703147e8fae73f3068761feb82f1fdf8d71151a6f3d6e3641c5890372f9aa286`. Host tests passed. The independently authored source archive is delivered in the conversation as `ALICE_P59_NATIVE_ENGINE_SOURCE_TESTS.zip` (includes `src/alice_guard.{h,c}`, unit tests, Makefile and compile proof).
 
 It performs **read-only safety decisions**: protects management addresses from external blocks, validates trusted-source events for repeated login failures, flags suspicious rates after 5+ samples using an exponential moving average, proposes 300-second quarantine only after two distinct fresh trusted signals and operator policy consent, and computes an 85%-of-measured-WAN weighted rate plan. **Every output has applied=false.**
 
