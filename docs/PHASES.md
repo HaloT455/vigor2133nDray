@@ -6,6 +6,7 @@
 - [x] Separate `baseline/v2133n-p25-3.9.7` and `work/v2133n-fixes` branches.
 - [x] Read-only audit, binary diff and hash-guarded experimental patch script.
 - [x] P26 limited MIPS big-endian decoder at `0x100`.
+- [x] Candidate record marker scan: AA1D7F50 (212 occurrences; 14 adjacent boundary matches).
 - [x] CRC and compressed/uncompressed size-validated embedded resource index.
 - [x] Offline regression tests using synthetic firmware fixtures.
 
