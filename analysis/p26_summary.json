@@ -5,7 +5,11 @@
   "source_bytes": 15761588,
   "firmware_version": "3.9.7_Anphat",
   "header_model": "v2133",
-  "mips_big_endian_word_sample": {"offset_hex": "0x100", "words": 32, "subset_decoded": 32},
+  "mips_big_endian_word_sample": {
+    "offset_hex": "0x100",
+    "words": 32,
+    "subset_decoded": 32
+  },
   "zip_magic_candidates": 57,
   "zip_local_entries_crc_and_size_verified": 8,
   "deflate_crc_valid_but_descriptor_size_rejected": 3,
@@ -21,5 +25,11 @@
   "legacy_lzo_magic_at_0x5266": "embedded_within_MIPS_code_candidate_not_validated_compression",
   "entire_rom_extracted": false,
   "repack_format_validated": false,
-  "flash_verified": false
+  "flash_verified": false,
+  "aa1d7f50_record_candidate_scan": {
+    "magic_occurrences": 212,
+    "plausible_little_endian_lengths": 146,
+    "exact_following_record_boundaries": 14,
+    "integrity_verified": false
+  }
 }
