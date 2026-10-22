@@ -14,3 +14,10 @@ __pycache__/
 *.pyc
 __extracts__/
 experiments/
+
+# Unpublished original ROM assets and diagnostics
+*.class
+*.jar
+private-extracts/
+*.dump
+*.log
