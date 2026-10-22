@@ -1,0 +1,107 @@
+{
+  "schema": "alice.vigor2133n.p33.embedded_dtb.public_report.v1",
+  "source_sha256": "009d4fa7eb4dc3428d9956505fa4463384d7e8a6c8bddea230b1abc907ebd2c2",
+  "decoded_rtos_sha256": "6018940fd0b28e905504db13e01d4b979bd0c03eda5241be8cf005912f8de612",
+  "dtb_file_offset_within_decoded_rtos": "0x11f4288",
+  "dtb_bytes": 10153,
+  "dtb_sha256": "d71a5269e34e7d57ff4fa508df189afd44504396c783cae1f543ecf27a20b30a",
+  "fdt_version": 17,
+  "parsed_nodes": 92,
+  "parsed_properties": 318,
+  "compatibles": [
+    "lantiq,xway",
+    "lantiq,grx390"
+  ],
+  "cpu_compatible": "mips,mips34Kc",
+  "candidate_flash_maps": [
+    {
+      "medium": "NAND (DTB-declared)",
+      "total_partition_span_bytes": 67108864,
+      "partitions": [
+        [
+          "uboot",
+          "0x0",
+          "0x100000"
+        ],
+        [
+          "ubootconfigA",
+          "0x100000",
+          "0x40000"
+        ],
+        [
+          "ubootconfigB",
+          "0x140000",
+          "0x40000"
+        ],
+        [
+          "gphyfirmware",
+          "0x180000",
+          "0x40000"
+        ],
+        [
+          "system_sw",
+          "0x1c0000",
+          "0x3200000"
+        ],
+        [
+          "calibration",
+          "0x33c0000",
+          "0x100000"
+        ],
+        [
+          "res",
+          "0x34c0000",
+          "0xb40000"
+        ]
+      ]
+    },
+    {
+      "medium": "SPI NOR (DTB-declared)",
+      "total_partition_span_bytes": 4128768,
+      "partitions": [
+        [
+          "SPI (RO) U-Boot Image",
+          "0x0",
+          "0x20000"
+        ],
+        [
+          "ENV_MAC",
+          "0x20000",
+          "0x10000"
+        ],
+        [
+          "DPF",
+          "0x30000",
+          "0x10000"
+        ],
+        [
+          "NVRAM",
+          "0x40000",
+          "0x10000"
+        ],
+        [
+          "kernel",
+          "0x50000",
+          "0x3a0000"
+        ]
+      ]
+    }
+  ],
+  "privacy": {
+    "placeholder_macs_in_tree": 3,
+    "mac_values_not_published": true,
+    "protected_partitions": [
+      "calibration",
+      "ENV_MAC",
+      "NVRAM",
+      "uboot",
+      "ubootconfigA",
+      "ubootconfigB"
+    ]
+  },
+  "limitations": [
+    "The DTB contains placeholder MAC address values and may describe a reference board",
+    "Physical router flash geometry, CPU ID and runtime device tree not verified",
+    "No driver integration, boot tests or flashable image is certified"
+  ]
+}
