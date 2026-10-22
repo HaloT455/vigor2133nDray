@@ -143,3 +143,15 @@ python3 -m tools.p32_port_check --elf port_scaffold/alice_diagnostic.analysis.el
 ```
 
 **No full DrayOS source, flashable firmware port, hardware boot acceptance, LAN/WAN/Wi-Fi functional tests, or rollback test has been achieved.** A green GitHub Actions badge confirms only the synthetic toolchain and test fixtures.
+
+## P33: Valid embedded FDT recovered; no physical boot yet
+
+P33 discovered a **valid version-17 Device Tree Blob** at decoded RTOS offset `0x11F4288` (10,153 bytes; 92 nodes and 318 properties), with `lantiq,grx390` and `mips,mips34Kc` compatible strings, NAND/SPI partition candidates and network peripherals. **Three embedded MACs are obvious placeholders**; this is not proof the board's actual SPI/NAND layout matches the FDT. The [P33 audit tool](tools/p33_dtb_audit.py), [redacted evidence](analysis/p33_embedded_dtb_evidence.json) and [detailed caveats](docs/P33_EMBEDDED_DTB_AND_PORT_BLOCKERS.md) are included, plus 6 synthetic tests. The genuine DTB is only available for **private local export** using a SHA256-guarded command.
+
+```bash
+python3 tools/p33_dtb_audit.py private-extracts/rtos/rtos_mips_candidate.bin \
+  --sha256 6018940fd0b28e905504db13e01d4b979bd0c03eda5241be8cf005912f8de612 \
+  --out experiments/p33_fdt_audit.json
+```
+
+**Do not interpret CI success, ELF link success, or a valid FDT as real router boot verification.** Original DrayOS source/functional substitute, live BSP/drivers and on-device acceptance are still outstanding.
