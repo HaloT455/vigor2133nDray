@@ -1,0 +1,33 @@
+name: P54 Guardian security regression (NO ROUTER WRITES)
+on:
+  push:
+    branches:
+      - work/v2133n-fixes
+    paths:
+      - 'p54/**'
+      - 'tests/test_p54_guardian.py'
+      - '.github/workflows/p54-guardian-ci.yml'
+  workflow_dispatch:
+jobs:
+  guardian-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile guarded core
+        run: python -m py_compile p54/guardian_core.py
+      - name: Test malicious inputs and fail-closed router controls
+        run: python -m unittest discover -s tests -p test_p54_guardian.py -v
+      - name: Verify NO router-write paths
+        run: python - <<'PY'
+            from pathlib import Path
+            source=Path('p54/guardian_core.py').read_text()
+            assert 'subprocess.run(' not in source
+            assert 'os.system(' not in source
+            assert 'router_config_changed=True' not in source
+            print('PASS — P54 offline observer and no remote router-write API')
+          PY
