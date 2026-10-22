@@ -107,3 +107,9 @@ python3 tools/p29_lab_repacker.py firmware.all \
 ```
 
 This is **research output, NOT FLASH VERIFIED and NOT the full DrayOS source**. A valid MD5 and package checksum are insufficient proof that a patched image can boot. The destination hardware has not been identified or physically tested.
+
+## P30 MIPS ELF research import
+
+The original **19,001,596-byte** extracted RTOS payload can now be wrapped for private use into an **ELF32 big-endian MIPS** analysis file with [`tools/p30_mips_elf_view.py`](tools/p30_mips_elf_view.py). The user ROM output was successfully decoded by `llvm-objdump` in the local analysis environment, exposing MIPS instructions and potential call sites. See [P30 validation](docs/P30_DISASSEMBLY_IMPORT.md). No real runtime load address, verified entry point, source code, linker sections, or flash-boot compatibility has been established.
+
+**Green tests refer to the research toolchain, not completion of a DrayOS/OpenWrt port.** Never flash experimental `.lab.bin` or `.analysis.elf` output.
