@@ -10,3 +10,7 @@ mips-object:
 	$(CLANG) $(MIPSFLAGS) -c alice_hal.c -o alice_hal_mips32be.o
 clean:
 	rm -f alice_hal_test alice_hal_mips32be.o
+
+.PHONY: diagnostic-elf
+diagnostic-elf:
+	sh build_diagnostic.sh
