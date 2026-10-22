@@ -1,0 +1,34 @@
+{
+  "schema": "alice.vigor2133n.p31.static_summary.v1",
+  "source_sha256": "009d4fa7eb4dc3428d9956505fa4463384d7e8a6c8bddea230b1abc907ebd2c2",
+  "rtos_sha256": "6018940fd0b28e905504db13e01d4b979bd0c03eda5241be8cf005912f8de612",
+  "rtos_bytes": 19001596,
+  "scan": {
+    "bytes": 19001596,
+    "candidate_prologues": 19711,
+    "candidate_jr_ra": 51832,
+    "candidate_jal": 215339,
+    "candidate_jal_low28_within_range": 202303,
+    "prologue_low28_jal_matches": 117,
+    "real_functions_verified": false
+  },
+  "dlm": {
+    "examined": 4,
+    "headers_consistent": 4,
+    "loader_abi_restored": false
+  },
+  "cross_compilation": {
+    "target": "mips-unknown-elf",
+    "architecture": "MIPS32r2 big-endian",
+    "kind": "relocatable object only",
+    "source": "original ALICE HAL scaffold",
+    "boot_tested": false
+  },
+  "port_status": {
+    "rtos_source_complete": false,
+    "bsp_drivers_verified": false,
+    "firmware_buildable_for_router": false,
+    "physical_boot_verified": false
+  },
+  "notes": "Opcode pattern matching is heuristic. Tests and cross-compile do not establish port readiness."
+}
