@@ -92,3 +92,18 @@ python3 tools/p28_port_inventory.py \
 ```
 
 **Do not confuse green CI with recovered DrayOS source, a bootable port, or proven safe firmware.** Hardware-specific porting still requires exact destination hardware, serial console evidence and board driver validation.
+
+## P29: Verified offline WEB/PFS re-packing laboratory
+
+The latest tool is [`tools/p29_lab_repacker.py`](tools/p29_lab_repacker.py) and regression tests are in [`tests/test_p29_lab_repacker.py`](tests/test_p29_lab_repacker.py). On the original P25 image: bit-exact no-op reassembly matched the complete original SHA256; full WEB re-compression decoded back to the same **1,312 resources**; and a private test modification to `V2000\\alice.htm` was recovered without altering any other decoded resource. BIN checksum, WEB checksum and footer MD5 matched in all three offline tests. See [P29 validation](docs/P29_OFFLINE_REPACK_VALIDATION.md).
+
+```bash
+python3 tools/p29_lab_repacker.py firmware.all \
+  --expected-sha256 009d4fa7eb4dc3428d9956505fa4463384d7e8a6c8bddea230b1abc907ebd2c2 \
+  --no-recompress --report experiments/p29_noop.json
+python3 tools/p29_lab_repacker.py firmware.all \
+  --expected-sha256 009d4fa7eb4dc3428d9956505fa4463384d7e8a6c8bddea230b1abc907ebd2c2 \
+  --report experiments/p29_repacked.json
+```
+
+This is **research output, NOT FLASH VERIFIED and NOT the full DrayOS source**. A valid MD5 and package checksum are insufficient proof that a patched image can boot. The destination hardware has not been identified or physically tested.
